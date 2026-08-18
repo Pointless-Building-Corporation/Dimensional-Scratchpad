@@ -1,0 +1,18 @@
+{
+  "type": "dimensionalscratchpad:scratchpad_dimension",
+  "generator": {
+    "type": "minecraft:flat",
+    "settings": {
+      "biome": "minecraft:plains",
+      "features": false,
+      "lakes": false,
+      "layers": [
+        {
+          "block": "minecraft:netherite_block",
+          "height": 1
+        }
+      ],
+      "structure_overrides": []
+    }
+  }
+}
