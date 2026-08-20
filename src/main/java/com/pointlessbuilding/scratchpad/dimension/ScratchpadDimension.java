@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.OptionalLong;
 
 import com.pointlessbuilding.scratchpad.DimensionalScratchpad;
+import com.pointlessbuilding.scratchpad.Registration;
 
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
@@ -17,8 +18,6 @@ import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.dimension.BuiltinDimensionTypes;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.dimension.LevelStem;
 import net.minecraft.world.level.levelgen.FlatLevelSource;
@@ -47,7 +46,7 @@ public class ScratchpadDimension {
             32,
             32,
             BlockTags.INFINIBURN_OVERWORLD,
-            BuiltinDimensionTypes.OVERWORLD_EFFECTS,
+            new ResourceLocation(DimensionalScratchpad.MODID, "scratchpad"),
             1.0f,
             new DimensionType.MonsterSettings(false, false, ConstantInt.of(0), 0)
         ));
@@ -59,12 +58,12 @@ public class ScratchpadDimension {
 
         FlatLevelGeneratorSettings settings = new FlatLevelGeneratorSettings(
             Optional.empty(),
-            biomes.getOrThrow(Biomes.PLAINS),
+            biomes.getOrThrow(Biomes.THE_VOID),
             List.of()
         ).withBiomeAndLayers(
-            List.of(new FlatLayerInfo(1, Blocks.NETHERITE_BLOCK)),
+            List.of(new FlatLayerInfo(5, Registration.BLANK.get())),
             Optional.of(HolderSet.direct()),
-            biomes.getOrThrow(Biomes.PLAINS)
+            biomes.getOrThrow(Biomes.THE_VOID)
         );
 
         FlatLevelSource flatGenerator = new FlatLevelSource(settings);

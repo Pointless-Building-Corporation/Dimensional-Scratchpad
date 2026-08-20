@@ -206,3 +206,9 @@ publishing {
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
 }
+
+tasks.register('deployToInstance', Copy){
+    from layout.buildDirectory.file("libs/${mod_id}-${mod_version}.jar")
+    into "C:/Users/subie/AppData/Roaming/PrismLauncher/instances/Dimensional Scratchpad/minecraft/mods"
+    dependsOn build
+}

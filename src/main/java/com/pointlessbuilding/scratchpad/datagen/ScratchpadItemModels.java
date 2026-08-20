@@ -1,6 +1,7 @@
 package com.pointlessbuilding.scratchpad.datagen;
 
 import com.pointlessbuilding.scratchpad.DimensionalScratchpad;
+import com.pointlessbuilding.scratchpad.Registration;
 
 import net.minecraft.data.PackOutput;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
@@ -14,6 +15,7 @@ public class ScratchpadItemModels extends ItemModelProvider{
 
     @Override
     protected void registerModels() {
+        withExistingParent(Registration.BLANK.getId().getPath(), modLoc("block/blank"));
     }
     
 }

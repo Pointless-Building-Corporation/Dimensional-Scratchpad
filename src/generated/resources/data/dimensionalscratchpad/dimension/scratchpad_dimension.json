@@ -3,13 +3,13 @@
   "generator": {
     "type": "minecraft:flat",
     "settings": {
-      "biome": "minecraft:plains",
+      "biome": "minecraft:the_void",
       "features": false,
       "lakes": false,
       "layers": [
         {
-          "block": "minecraft:netherite_block",
-          "height": 1
+          "block": "dimensionalscratchpad:blank",
+          "height": 5
         }
       ],
       "structure_overrides": []
