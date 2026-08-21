@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import com.pointlessbuilding.scratchpad.DimensionalScratchpad;
+import com.pointlessbuilding.scratchpad.Registration;
 import com.pointlessbuilding.scratchpad.dimension.ScratchpadDimension;
 
 import net.minecraft.core.NonNullList;
@@ -12,8 +13,12 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.food.FoodData;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -48,12 +53,10 @@ public class PlayerEvents {
                     player.getActiveEffects(),
                     player.getAirSupply(),
                     player.fallDistance,
-                    player.getAbilities().mayfly,
-                    player.getAbilities().invulnerable,
-                    player.getAbilities().instabuild
+                    player.gameMode.getGameModeForPlayer()
                 ));
 
-            ScratchpadAbilities.applyScratchpadAbilities(player);
+            player.setGameMode(GameType.CREATIVE);
         }
 
         // Leaving Scratchpad
@@ -71,9 +74,7 @@ public class PlayerEvents {
             Collection<MobEffectInstance> lastEffects = player.getCapability(ScratchpadState.SCRATCHPAD_STATE).map(IScratchpadState::getLastEffects).orElse(new ArrayList<>());
             int lastAir = player.getCapability(ScratchpadState.SCRATCHPAD_STATE).map(IScratchpadState::getLastAirSupply).orElse(player.getMaxAirSupply());
             float lastFallDist = player.getCapability(ScratchpadState.SCRATCHPAD_STATE).map(IScratchpadState::getLastFallDistance).orElse(0.0f);
-            boolean mayFly = player.getCapability(ScratchpadState.SCRATCHPAD_STATE).map(IScratchpadState::getMayFly).orElse(false);
-            boolean invulnerable = player.getCapability(ScratchpadState.SCRATCHPAD_STATE).map(IScratchpadState::getInvulnerable).orElse(false);
-            boolean instabuild = player.getCapability(ScratchpadState.SCRATCHPAD_STATE).map(IScratchpadState::getInstabuild).orElse(false);
+            GameType lastGameType = player.getCapability(ScratchpadState.SCRATCHPAD_STATE).map(IScratchpadState::getLastGameType).orElse(GameType.SURVIVAL);
 
             player.getInventory().items.clear();
             player.getInventory().armor.clear();
@@ -102,9 +103,28 @@ public class PlayerEvents {
             player.setAirSupply(lastAir);
             player.fallDistance = lastFallDist;
 
-            ScratchpadAbilities.restoreScratchpadAbilities(player, mayFly, invulnerable, instabuild);
+            player.setGameMode(lastGameType);
         }
 
+    }
+
+    @SubscribeEvent
+    public static void onLeftClickBlock(PlayerInteractEvent.LeftClickBlock event) {
+        BlockState state = event.getLevel().getBlockState(event.getPos());
+
+        if(state.is(Registration.BLANK.get())) {
+            event.setCanceled(true);
+        }
+    }
+
+    @SubscribeEvent
+    public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
+        if (!event.getLevel().dimension().equals(ScratchpadDimension.LEVEL)) return;
+        BlockState state = event.getLevel().getBlockState(event.getPos());
+
+        if(state.is(Blocks.ENDER_CHEST)) {
+            event.setCanceled(true);
+        }
     }
 
 }

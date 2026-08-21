@@ -7,6 +7,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.AutoRegisterCapability;
@@ -16,7 +17,7 @@ public interface IScratchpadState {
 
     public void savePlayerState(NonNullList<ItemStack> lastItems, NonNullList<ItemStack> lastArmor,
     NonNullList<ItemStack> lastOffhand, float lastHealth, int lastFoodLevel, float lastSaturation, float lastExhaustion, int lastFireTicks, int lastXp, Collection<MobEffectInstance> lastEffects,
-    int lastAirSupply, float lastFallDistance, boolean mayFly, boolean invulnerable, boolean instabuild);
+    int lastAirSupply, float lastFallDistance, GameType lastGameType);
     public void savePlayerPos(ResourceKey<Level> lastDimension, Vec3 lastPosition);
 
     public ResourceKey<Level> getLastDimension();
@@ -33,9 +34,7 @@ public interface IScratchpadState {
     public Collection<MobEffectInstance> getLastEffects();
     public int getLastAirSupply();
     public float getLastFallDistance();
-    public boolean getMayFly();
-    public boolean getInvulnerable();
-    public boolean getInstabuild();
+    public GameType getLastGameType();
 
     CompoundTag serializeNBT();
     void deserializeNBT(CompoundTag tag);
