@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
 import com.pointlessbuilding.scratchpad.datagen.DataGeneration;
+import com.pointlessbuilding.scratchpad.network.Network;
 
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -32,7 +33,7 @@ public class DimensionalScratchpad {
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
-        // Network.init();
+        Network.init();
 
         LOGGER.info("Loaded Dimensional Scratchpad!");
     }

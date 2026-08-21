@@ -16,6 +16,8 @@ public class ScratchpadLanguageProvider extends LanguageProvider{
     protected void addTranslations() {
         // Blocks and Items
         add(Registration.BLANK.get(), "Blank");
+
+        add("dimension.dimensionalscratchpad.not_safe", "Can't teleport now, there are monsters nearby");
     }
     
 }

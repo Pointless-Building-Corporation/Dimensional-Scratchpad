@@ -1,3 +1,4 @@
 {
-  "block.dimensionalscratchpad.blank": "Blank"
+  "block.dimensionalscratchpad.blank": "Blank",
+  "dimension.dimensionalscratchpad.not_safe": "Can't teleport now, there are monsters nearby"
 }
