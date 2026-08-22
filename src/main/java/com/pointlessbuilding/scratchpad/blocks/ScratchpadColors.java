@@ -1,6 +1,7 @@
 package com.pointlessbuilding.scratchpad.blocks;
 
 import com.pointlessbuilding.scratchpad.DimensionalScratchpad;
+import com.pointlessbuilding.scratchpad.DimensionalScratchpadConfig;
 import com.pointlessbuilding.scratchpad.Registration;
 
 import net.minecraft.core.BlockPos;
@@ -27,8 +28,8 @@ public class ScratchpadColors {
         double phase = (pos.getX() - pos.getZ()) / 32.0;
         double t = (Math.sin(phase * 2.0 * Math.PI) + 1.0) * 0.5;
 
-        int blue = 0xA2BFFE;
-        int pink = 0xFFC5D3;
+        int blue = DimensionalScratchpadConfig.COLOR_GRADIENT_START.get();
+        int pink = DimensionalScratchpadConfig.COLOR_GRADIENT_END.get();
 
         int rB = (blue>>16) & 0xFF, rP = (pink>>16) & 0xFF;
         int gB = (blue>>8) & 0xFF, gP = (pink>>8) & 0xFF;

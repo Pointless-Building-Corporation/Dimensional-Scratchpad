@@ -10,6 +10,7 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
+import com.pointlessbuilding.scratchpad.DimensionalScratchpadConfig;
 
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -30,8 +31,10 @@ public class ScratchpadEffects extends DimensionSpecialEffects{
     private static void renderCubeSky(PoseStack poseStack, int ticks, float partialTick) {
         float s = 100.0f;
 
-        Vector3f bottomColor = new Vector3f(162/255.0f, 191/255.0f, 254/255.0f);
-        Vector3f topColor = new Vector3f(1.0f, 197/255.0f, 211/255.0f);
+        int starting = DimensionalScratchpadConfig.COLOR_GRADIENT_START.get();
+        int ending = DimensionalScratchpadConfig.COLOR_GRADIENT_END.get();
+        Vector3f bottomColor = new Vector3f(((starting >> 16) & 0xFF)/ 255.0f, ((starting >> 8) & 0xFF)/ 255.0f, ((starting) & 0xFF)/ 255.0f);
+        Vector3f topColor = new Vector3f(((ending >> 16) & 0xFF)/ 255.0f, ((ending >> 8) & 0xFF)/ 255.0f, ((ending) & 0xFF)/ 255.0f);
 
         Matrix4f matrix = poseStack.last().pose();
 
