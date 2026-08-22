@@ -13,19 +13,13 @@ import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-@SuppressWarnings("removal")
 @Mod.EventBusSubscriber(modid = DimensionalScratchpad.MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ClientSetup {
     
-    public static final String ENTER_SCRATCHPAD_STRING = "key.dimensionalscratchpad.enter";
-    public static final String LEAVE_SCRATCHPAD_STRING = "key.dimensionalscratchpad.leave";
+    public static final String SCRATCHPAD_STRING = "key.dimensionalscratchpad.scratchpad";
 
-    public static final Lazy<EnterScratchpadKeymap> ENTER_SCRATCHPAD_KEYMAP = Lazy.of(() ->
-        new EnterScratchpadKeymap(ENTER_SCRATCHPAD_STRING, KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_LEFT_BRACKET, KeyMapping.CATEGORY_MISC)
-    );
-
-    public static final Lazy<LeaveScratchpadKeymap> LEAVE_SCRATCHPAD_KEYMAP = Lazy.of(() ->
-        new LeaveScratchpadKeymap(LEAVE_SCRATCHPAD_STRING, KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_RIGHT_BRACKET, KeyMapping.CATEGORY_MISC)
+    public static final Lazy<ScratchpadKeymap> SCRATCHPAD_KEYMAP = Lazy.of(() ->
+        new ScratchpadKeymap(SCRATCHPAD_STRING, KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_LEFT_BRACKET, KeyMapping.CATEGORY_MISC)
     );
 
     // @SubscribeEvent
@@ -40,8 +34,7 @@ public class ClientSetup {
 
     @SubscribeEvent
     public static void registerKeybindings(RegisterKeyMappingsEvent event) {
-        event.register(ENTER_SCRATCHPAD_KEYMAP.get());
-        event.register(LEAVE_SCRATCHPAD_KEYMAP.get());
+        event.register(SCRATCHPAD_KEYMAP.get());
     }
 
 }

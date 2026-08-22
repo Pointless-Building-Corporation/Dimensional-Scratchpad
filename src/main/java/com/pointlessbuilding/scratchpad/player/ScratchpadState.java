@@ -33,6 +33,9 @@ public class ScratchpadState implements IScratchpadState, ICapabilityProvider, I
     public static final String TAG_LAST_POSX = "LastX";
     public static final String TAG_LAST_POSY = "LastY";
     public static final String TAG_LAST_POSZ = "LastZ";
+    public static final String TAG_SCRATCH_POSX = "ScratchpadX";
+    public static final String TAG_SCRATCH_POSY = "ScratchpadY";
+    public static final String TAG_SCRATCH_POSZ = "ScratchpadZ";
     public static final String TAG_LAST_ITEMS = "LastItems";
     public static final String TAG_LAST_ARMOR = "LastArmor";
     public static final String TAG_LAST_OFFHAND = "LastOffhand";
@@ -50,6 +53,7 @@ public class ScratchpadState implements IScratchpadState, ICapabilityProvider, I
 
     private ResourceKey<Level> lastDimension = Level.OVERWORLD;
     private Vec3 lastPosition = new Vec3(0, 100, 0);
+    private Vec3 scratchpadPosition = new Vec3(0, 5, 0);
     private NonNullList<ItemStack> lastItems = NonNullList.withSize(36, ItemStack.EMPTY);;
     private NonNullList<ItemStack> lastArmor = NonNullList.withSize(4, ItemStack.EMPTY);;
     private NonNullList<ItemStack> lastOffhand = NonNullList.withSize(1, ItemStack.EMPTY);;
@@ -95,9 +99,15 @@ public class ScratchpadState implements IScratchpadState, ICapabilityProvider, I
         this.lastGameType = lastGameType;
     }
 
-    public void savePlayerPos(ResourceKey<Level> lastDimension, Vec3 lastPosition) {
+    @Override
+    public void savePlayerLastPos(ResourceKey<Level> lastDimension, Vec3 lastPosition) {
         this.lastDimension = lastDimension;
         this.lastPosition = new Vec3(lastPosition.x, lastPosition.y, lastPosition.z);
+    }
+
+    @Override
+    public void saveScratchpadPos(Vec3 scratchpadPosition) {
+        this.scratchpadPosition = new Vec3(scratchpadPosition.x, scratchpadPosition.y, scratchpadPosition.z);
     }
 
     @Override
@@ -108,6 +118,11 @@ public class ScratchpadState implements IScratchpadState, ICapabilityProvider, I
     @Override
     public Vec3 getLastPosition() {
         return lastPosition;
+    }
+
+    @Override
+    public Vec3 getScratchpadPosition() {
+        return scratchpadPosition;
     }
 
     @Override
@@ -196,6 +211,10 @@ public class ScratchpadState implements IScratchpadState, ICapabilityProvider, I
         tag.putDouble(TAG_LAST_POSY, lastPosition.y);
         tag.putDouble(TAG_LAST_POSZ, lastPosition.z);
 
+        tag.putDouble(TAG_SCRATCH_POSX, scratchpadPosition.x);
+        tag.putDouble(TAG_SCRATCH_POSY, scratchpadPosition.y);
+        tag.putDouble(TAG_SCRATCH_POSZ, scratchpadPosition.z);
+
         ListTag items = new ListTag();
         for(ItemStack stack : lastItems) items.add(stack.save(new CompoundTag()));
         tag.put(TAG_LAST_ITEMS, items);
@@ -235,6 +254,12 @@ public class ScratchpadState implements IScratchpadState, ICapabilityProvider, I
             tag.getDouble(TAG_LAST_POSX),
             tag.getDouble(TAG_LAST_POSY),
             tag.getDouble(TAG_LAST_POSZ)
+        );
+
+        scratchpadPosition = new Vec3(
+            tag.getDouble(TAG_SCRATCH_POSX),
+            tag.getDouble(TAG_SCRATCH_POSY),
+            tag.getDouble(TAG_SCRATCH_POSZ)
         );
 
         lastItems = NonNullList.withSize(36, ItemStack.EMPTY);

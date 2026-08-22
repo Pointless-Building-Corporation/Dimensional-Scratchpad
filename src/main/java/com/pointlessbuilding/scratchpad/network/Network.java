@@ -1,8 +1,7 @@
 package com.pointlessbuilding.scratchpad.network;
 
 import com.pointlessbuilding.scratchpad.DimensionalScratchpad;
-import com.pointlessbuilding.scratchpad.network.packets.EnterScratchpadPacket;
-import com.pointlessbuilding.scratchpad.network.packets.LeaveScratchpadPacket;
+import com.pointlessbuilding.scratchpad.network.packets.ScratchpadPacket;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -23,8 +22,7 @@ public class Network {
             DimensionalScratchpad.VERSION::equals
         );
 
-        CHANNEL.registerMessage(ID++, EnterScratchpadPacket.class, EnterScratchpadPacket::encode, EnterScratchpadPacket::decode, EnterScratchpadPacket::handle);
-        CHANNEL.registerMessage(ID++, LeaveScratchpadPacket.class, LeaveScratchpadPacket::encode, LeaveScratchpadPacket::decode, LeaveScratchpadPacket::handle);
+        CHANNEL.registerMessage(ID++, ScratchpadPacket.class, ScratchpadPacket::encode, ScratchpadPacket::decode, ScratchpadPacket::handle);
     }
 
     public static void sendToClient(Object packet, ServerPlayer player) {

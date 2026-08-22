@@ -19,32 +19,17 @@ public class ScratchpadCommand {
             .executes(ctx -> teleportToScratchpadCommand(ctx, ctx.getSource().getPlayerOrException()))
         );
 
-        scratchpad.then(Commands.literal("leave")
-            .executes(ctx -> leaveScratchpadCommand(ctx, ctx.getSource().getPlayerOrException()))
-        );
-
         return scratchpad;
     }
 
     private static int teleportToScratchpadCommand(CommandContext<CommandSourceStack> ctx, ServerPlayer player) {
-        boolean success = ScratchpadDimension.TravelToDimension(player);
+        boolean success = ScratchpadDimension.TravelToOrFromDimension(player);
         if(!success) {
-            ctx.getSource().sendFailure(Component.literal("Did not travel to the Scratchpad."));
+            ctx.getSource().sendFailure(Component.literal("There was some issue with the travel."));
             return 0;
         }
 
         ctx.getSource().sendSuccess(() -> Component.literal("Teleported!"), true);
-        return 1;
-    }
-
-    private static int leaveScratchpadCommand(CommandContext<CommandSourceStack> ctx, ServerPlayer player) {
-        boolean success = ScratchpadDimension.LeaveDimension(player);
-        if(!success) {
-            ctx.getSource().sendFailure(Component.literal("There was a problem leaving the Scratchpad."));
-            return 0;
-        }
-
-        ctx.getSource().sendSuccess(() -> Component.literal("Left!"), true);
         return 1;
     }
 

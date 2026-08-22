@@ -1,18 +1,11 @@
 {
   "type": "dimensionalscratchpad:scratchpad_dimension",
   "generator": {
-    "type": "minecraft:flat",
-    "settings": {
-      "biome": "minecraft:the_void",
-      "features": false,
-      "lakes": false,
-      "layers": [
-        {
-          "block": "dimensionalscratchpad:blank",
-          "height": 5
-        }
-      ],
-      "structure_overrides": []
-    }
+    "type": "dimensionalscratchpad:scratchpad",
+    "biome_source": {
+      "type": "minecraft:fixed",
+      "biome": "minecraft:the_void"
+    },
+    "shell_size": 64
   }
 }

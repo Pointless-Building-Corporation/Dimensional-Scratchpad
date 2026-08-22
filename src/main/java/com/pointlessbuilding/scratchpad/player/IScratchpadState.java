@@ -18,10 +18,12 @@ public interface IScratchpadState {
     public void savePlayerState(NonNullList<ItemStack> lastItems, NonNullList<ItemStack> lastArmor,
     NonNullList<ItemStack> lastOffhand, float lastHealth, int lastFoodLevel, float lastSaturation, float lastExhaustion, int lastFireTicks, int lastXp, Collection<MobEffectInstance> lastEffects,
     int lastAirSupply, float lastFallDistance, GameType lastGameType);
-    public void savePlayerPos(ResourceKey<Level> lastDimension, Vec3 lastPosition);
+    public void savePlayerLastPos(ResourceKey<Level> lastDimension, Vec3 lastPosition);
+    public void saveScratchpadPos(Vec3 scratchpadPosition);
 
     public ResourceKey<Level> getLastDimension();
     public Vec3 getLastPosition();
+    public Vec3 getScratchpadPosition();
     public NonNullList<ItemStack> getLastItems();
     public NonNullList<ItemStack> getLastArmor();
     public NonNullList<ItemStack> getLastOffhand();

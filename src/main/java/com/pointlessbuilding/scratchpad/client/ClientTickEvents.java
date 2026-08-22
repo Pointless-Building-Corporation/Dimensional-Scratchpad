@@ -2,8 +2,7 @@ package com.pointlessbuilding.scratchpad.client;
 
 import com.pointlessbuilding.scratchpad.DimensionalScratchpad;
 import com.pointlessbuilding.scratchpad.network.Network;
-import com.pointlessbuilding.scratchpad.network.packets.EnterScratchpadPacket;
-import com.pointlessbuilding.scratchpad.network.packets.LeaveScratchpadPacket;
+import com.pointlessbuilding.scratchpad.network.packets.ScratchpadPacket;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.TickEvent;
@@ -17,12 +16,8 @@ public class ClientTickEvents {
     @SubscribeEvent
     public static void onClientTick(ClientTickEvent event) {
         if(event.phase == TickEvent.Phase.END) {
-            while(ClientSetup.ENTER_SCRATCHPAD_KEYMAP.get().consumeClick()) {
-                Network.sendToServer(new EnterScratchpadPacket());
-            }
-
-            while(ClientSetup.LEAVE_SCRATCHPAD_KEYMAP.get().consumeClick()) {
-                Network.sendToServer(new LeaveScratchpadPacket());
+            while(ClientSetup.SCRATCHPAD_KEYMAP.get().consumeClick()) {
+                Network.sendToServer(new ScratchpadPacket());
             }
         }
     }

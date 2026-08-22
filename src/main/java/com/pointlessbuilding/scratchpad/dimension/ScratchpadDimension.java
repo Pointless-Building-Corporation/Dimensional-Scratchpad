@@ -1,16 +1,13 @@
 package com.pointlessbuilding.scratchpad.dimension;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.OptionalLong;
 
 import com.pointlessbuilding.scratchpad.DimensionalScratchpad;
-import com.pointlessbuilding.scratchpad.Registration;
 import com.pointlessbuilding.scratchpad.player.IScratchpadState;
 import com.pointlessbuilding.scratchpad.player.ScratchpadState;
 
 import net.minecraft.core.HolderGetter;
-import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstapContext;
 import net.minecraft.network.chat.Component;
@@ -25,11 +22,9 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
+import net.minecraft.world.level.biome.FixedBiomeSource;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.dimension.LevelStem;
-import net.minecraft.world.level.levelgen.FlatLevelSource;
-import net.minecraft.world.level.levelgen.flat.FlatLayerInfo;
-import net.minecraft.world.level.levelgen.flat.FlatLevelGeneratorSettings;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
@@ -51,9 +46,9 @@ public class ScratchpadDimension {
             1.0,
             false,
             false,
-            0,
-            32,
-            32,
+            -16,
+            320,
+            320,
             BlockTags.INFINIBURN_OVERWORLD,
             new ResourceLocation(DimensionalScratchpad.MODID, "scratchpad"),
             1.0f,
@@ -65,23 +60,22 @@ public class ScratchpadDimension {
         HolderGetter<Biome> biomes = context.lookup(Registries.BIOME);
         HolderGetter<DimensionType> dimTypes = context.lookup(Registries.DIMENSION_TYPE);
 
-        FlatLevelGeneratorSettings settings = new FlatLevelGeneratorSettings(
-            Optional.empty(),
-            biomes.getOrThrow(Biomes.THE_VOID),
-            List.of()
-        ).withBiomeAndLayers(
-            List.of(new FlatLayerInfo(5, Registration.BLANK.get())),
-            Optional.of(HolderSet.direct()),
-            biomes.getOrThrow(Biomes.THE_VOID)
-        );
+        FixedBiomeSource voidSource = new FixedBiomeSource(biomes.getOrThrow(Biomes.THE_VOID));
 
-        FlatLevelSource flatGenerator = new FlatLevelSource(settings);
+        ScratchpadChunkGenerator scratchpadGenerator = new ScratchpadChunkGenerator(voidSource, 64);
 
-        LevelStem stem = new LevelStem(dimTypes.getOrThrow(DIM_TYPE), flatGenerator);
+        LevelStem stem = new LevelStem(dimTypes.getOrThrow(DIM_TYPE), scratchpadGenerator);
         context.register(DIM_KEY, stem);
     }
 
-    public static boolean TravelToDimension(ServerPlayer player) {
+    public static boolean TravelToOrFromDimension(ServerPlayer player) {
+        if(player.level().dimension().equals(ScratchpadDimension.LEVEL))
+            return LeaveDimension(player);
+        else
+            return TravelToDimension(player);
+    }
+
+    private static boolean TravelToDimension(ServerPlayer player) {
         MinecraftServer server = player.getServer();
 
         if(player.level().dimension().equals(ScratchpadDimension.LEVEL)) {
@@ -107,18 +101,23 @@ public class ScratchpadDimension {
         }
 
         player.getCapability(ScratchpadState.SCRATCHPAD_STATE)
-            .ifPresent(state -> state.savePlayerPos(player.level().dimension(), player.position()));
+            .ifPresent(state -> state.savePlayerLastPos(player.level().dimension(), player.position()));
+
+        Vec3 scratchpadPos = player.getCapability(ScratchpadState.SCRATCHPAD_STATE).map(IScratchpadState::getScratchpadPosition).orElse(new Vec3(0, 5, 0));
         
-        player.teleportTo(targetLevel, 0.5, 10, 0.5, player.getYRot(), player.getXRot());
+        player.teleportTo(targetLevel, scratchpadPos.x, scratchpadPos.y, scratchpadPos.z, player.getYRot(), player.getXRot());
         return true;
     }
 
-    public static boolean LeaveDimension(ServerPlayer player) {
+    private static boolean LeaveDimension(ServerPlayer player) {
         MinecraftServer server = player.getServer();
 
         if(!player.level().dimension().equals(ScratchpadDimension.LEVEL)) {
             return false;
         }
+
+        player.getCapability(ScratchpadState.SCRATCHPAD_STATE)
+            .ifPresent(state -> state.saveScratchpadPos(player.position()));
 
         ResourceKey<Level> prevDimension = player.getCapability(ScratchpadState.SCRATCHPAD_STATE).map(IScratchpadState::getLastDimension).orElse(Level.OVERWORLD);
         Vec3 lastPos = player.getCapability(ScratchpadState.SCRATCHPAD_STATE).map(IScratchpadState::getLastPosition).orElse(new Vec3(0,100,0));
