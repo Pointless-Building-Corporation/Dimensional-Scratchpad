@@ -12,12 +12,13 @@ import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = DimensionalScratchpad.MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ScratchpadColors {
-    
+
     @SubscribeEvent
     public static void register(RegisterColorHandlersEvent.Block event) {
         event.register(
             (state, level, pos, tintIndex) -> {
                 if(pos == null) return 0xFFFFFF;
+                // return calculateColor(pos);
                 return calculateColor(pos);
             },
             Registration.BLANK.get()

@@ -20,8 +20,10 @@ public interface IScratchpadState {
     int lastAirSupply, float lastFallDistance, GameType lastGameType);
     public void savePlayerLastPos(ResourceKey<Level> lastDimension, Vec3 lastPosition);
     public void saveScratchpadPos(Vec3 scratchpadPosition);
+    public void saveDimensionSlot(int dimensionSlot);
 
     public ResourceKey<Level> getLastDimension();
+    public int getDimensionSlot();
     public Vec3 getLastPosition();
     public Vec3 getScratchpadPosition();
     public NonNullList<ItemStack> getLastItems();

@@ -9,14 +9,13 @@ import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
 
-@SuppressWarnings("removal")
 public class Network {
     private static SimpleChannel CHANNEL;
     private static int ID = 0;
 
     public static void init() {
         CHANNEL = NetworkRegistry.newSimpleChannel(
-            new ResourceLocation(DimensionalScratchpad.MODID, "main"),
+            ResourceLocation.fromNamespaceAndPath(DimensionalScratchpad.MODID, "main"),
             () -> DimensionalScratchpad.VERSION,
             DimensionalScratchpad.VERSION::equals,
             DimensionalScratchpad.VERSION::equals

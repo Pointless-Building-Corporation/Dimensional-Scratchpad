@@ -22,9 +22,14 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 public class ClientSetup {
     
     public static final String SCRATCHPAD_STRING = "key.dimensionalscratchpad.scratchpad";
+    public static final String SCRATCHPAD_TOOLS_STRING = "key.dimensionalscratchpad.scratchpad__tools";
 
     public static final Lazy<ScratchpadKeymap> SCRATCHPAD_KEYMAP = Lazy.of(() ->
         new ScratchpadKeymap(SCRATCHPAD_STRING, KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_LEFT_BRACKET, KeyMapping.CATEGORY_MISC)
+    );
+
+    public static final Lazy<ScratchpadKeymap> SCRATCHPAD_TOOLS_KEYMAP = Lazy.of(() ->
+        new ScratchpadKeymap(SCRATCHPAD_TOOLS_STRING, KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_X, KeyMapping.CATEGORY_MISC)
     );
 
     @SubscribeEvent
@@ -40,6 +45,7 @@ public class ClientSetup {
     @SubscribeEvent
     public static void registerKeybindings(RegisterKeyMappingsEvent event) {
         event.register(SCRATCHPAD_KEYMAP.get());
+        event.register(SCRATCHPAD_TOOLS_KEYMAP.get());
     }
 
 }

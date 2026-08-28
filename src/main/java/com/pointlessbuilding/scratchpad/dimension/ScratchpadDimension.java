@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.OptionalLong;
 
 import com.pointlessbuilding.scratchpad.DimensionalScratchpad;
+import com.pointlessbuilding.scratchpad.DimensionalScratchpadConfig;
 import com.pointlessbuilding.scratchpad.player.IScratchpadState;
 import com.pointlessbuilding.scratchpad.player.ScratchpadState;
 
@@ -28,12 +29,11 @@ import net.minecraft.world.level.dimension.LevelStem;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
-@SuppressWarnings("removal")
 public class ScratchpadDimension {
     
-    public static final ResourceKey<LevelStem> DIM_KEY = ResourceKey.create(Registries.LEVEL_STEM, new ResourceLocation(DimensionalScratchpad.MODID, "scratchpad_dimension"));
-    public static final ResourceKey<Level> LEVEL = ResourceKey.create(Registries.DIMENSION, new ResourceLocation(DimensionalScratchpad.MODID, "scratchpad_dimension"));
-    public static final ResourceKey<DimensionType> DIM_TYPE = ResourceKey.create(Registries.DIMENSION_TYPE, new ResourceLocation(DimensionalScratchpad.MODID, "scratchpad_dimension"));
+    public static final ResourceKey<LevelStem> DIM_KEY = ResourceKey.create(Registries.LEVEL_STEM, ResourceLocation.fromNamespaceAndPath(DimensionalScratchpad.MODID, "scratchpad_dimension"));
+    public static final ResourceKey<Level> LEVEL = ResourceKey.create(Registries.DIMENSION, ResourceLocation.fromNamespaceAndPath(DimensionalScratchpad.MODID, "scratchpad_dimension"));
+    public static final ResourceKey<DimensionType> DIM_TYPE = ResourceKey.create(Registries.DIMENSION_TYPE, ResourceLocation.fromNamespaceAndPath(DimensionalScratchpad.MODID, "scratchpad_dimension"));
     
     // Bootstap is factually a misspelling in Mojang's og source code. That's hilarious
     public static void bootstrapType(BootstapContext<DimensionType> context) {
@@ -50,7 +50,7 @@ public class ScratchpadDimension {
             320,
             320,
             BlockTags.INFINIBURN_OVERWORLD,
-            new ResourceLocation(DimensionalScratchpad.MODID, "scratchpad"),
+            ResourceLocation.fromNamespaceAndPath(DimensionalScratchpad.MODID, "scratchpad"),
             1.0f,
             new DimensionType.MonsterSettings(false, false, ConstantInt.of(0), 0)
         ));
@@ -103,10 +103,43 @@ public class ScratchpadDimension {
         player.getCapability(ScratchpadState.SCRATCHPAD_STATE)
             .ifPresent(state -> state.savePlayerLastPos(player.level().dimension(), player.position()));
 
-        Vec3 scratchpadPos = player.getCapability(ScratchpadState.SCRATCHPAD_STATE).map(IScratchpadState::getScratchpadPosition).orElse(new Vec3(0, 5, 0));
+        Vec3 scratchpadPos;
+        int playerSlot = player.getCapability(ScratchpadState.SCRATCHPAD_STATE).map(IScratchpadState::getDimensionSlot).orElse(-1);
+        if(playerSlot == -1) {
+            playerSlot = ScratchpadData.get(targetLevel).allocateSlot();
+            scratchpadPos = calculateNewScratchpadSlotPos(playerSlot);
+            final int slotForSave = playerSlot;
+            DimensionalScratchpad.LOGGER.info("Assigned new slot to {}: {}. New coords: {}", player.getName(), slotForSave, scratchpadPos);
+            player.getCapability(ScratchpadState.SCRATCHPAD_STATE).ifPresent(state -> state.saveDimensionSlot(slotForSave));
+        }
+        else scratchpadPos = player.getCapability(ScratchpadState.SCRATCHPAD_STATE).map(IScratchpadState::getScratchpadPosition).orElse(calculateNewScratchpadSlotPos(playerSlot));
         
         player.teleportTo(targetLevel, scratchpadPos.x, scratchpadPos.y, scratchpadPos.z, player.getYRot(), player.getXRot());
         return true;
+    }
+
+    //Calculate new position in spiral form starting from x=1, z=1
+    private static Vec3 calculateNewScratchpadSlotPos(int slot) {
+        int shellSize = DimensionalScratchpadConfig.SHELL_SIZE.get();
+        int gx = 0, gz = 0;
+        int stepsInLeg = 1, legCount = 0, stepsTaken = 0;
+        if(slot > 0) {
+            int dx = 1, dz = 0;
+            for(int i = 0; i < slot; i++) {
+                gx += dx;
+                gz += dz;
+                stepsTaken++;
+                if(stepsTaken == stepsInLeg) {
+                    stepsTaken = 0;
+                    int newDx = -dz, newDz = dx;
+                    dx = newDx; dz = newDz;
+                    legCount++;
+                    if(legCount % 2 == 0) stepsInLeg++;
+                }
+            }
+        }
+
+        return new Vec3(gx * (shellSize + 23), 5, gz * (shellSize + 23));
     }
 
     private static boolean LeaveDimension(ServerPlayer player) {

@@ -30,6 +30,7 @@ import net.minecraftforge.common.util.LazyOptional;
 public class ScratchpadState implements IScratchpadState, ICapabilityProvider, INBTSerializable<CompoundTag>{
 
     public static final String TAG_LAST_DIM = "LastDimension";
+    public static final String TAG_DIM_SLOT = "DimensionSlot";
     public static final String TAG_LAST_POSX = "LastX";
     public static final String TAG_LAST_POSY = "LastY";
     public static final String TAG_LAST_POSZ = "LastZ";
@@ -52,6 +53,7 @@ public class ScratchpadState implements IScratchpadState, ICapabilityProvider, I
 
 
     private ResourceKey<Level> lastDimension = Level.OVERWORLD;
+    private int dimensionSlot = -1;
     private Vec3 lastPosition = new Vec3(0, 100, 0);
     private Vec3 scratchpadPosition = new Vec3(0, 5, 0);
     private NonNullList<ItemStack> lastItems = NonNullList.withSize(36, ItemStack.EMPTY);;
@@ -111,8 +113,18 @@ public class ScratchpadState implements IScratchpadState, ICapabilityProvider, I
     }
 
     @Override
+    public void saveDimensionSlot(int dimensionSlot) {
+        this.dimensionSlot = dimensionSlot;
+    }
+
+    @Override
     public ResourceKey<Level> getLastDimension() {
         return lastDimension;
+    }
+
+    @Override
+    public int getDimensionSlot() {
+        return dimensionSlot;
     }
 
     @Override
@@ -206,6 +218,7 @@ public class ScratchpadState implements IScratchpadState, ICapabilityProvider, I
         CompoundTag tag = new CompoundTag();
 
         tag.putString(TAG_LAST_DIM, lastDimension.location().toString());
+        tag.putInt(TAG_DIM_SLOT, dimensionSlot);
 
         tag.putDouble(TAG_LAST_POSX, lastPosition.x);
         tag.putDouble(TAG_LAST_POSY, lastPosition.y);
@@ -239,6 +252,7 @@ public class ScratchpadState implements IScratchpadState, ICapabilityProvider, I
         tag.putInt(TAG_LAST_XP, lastXp);
         tag.putInt(TAG_LAST_AIR, lastAirSupply);
         tag.putFloat(TAG_LAST_FALLDIST, lastFallDistance);
+        tag.putInt(TAG_GAMETYPE, lastGameType.getId());
 
         return tag;
     }
@@ -249,6 +263,7 @@ public class ScratchpadState implements IScratchpadState, ICapabilityProvider, I
             Registries.DIMENSION,
             ResourceLocation.parse(tag.getString(TAG_LAST_DIM))
         );
+        dimensionSlot = tag.getInt(TAG_DIM_SLOT);
 
         lastPosition = new Vec3(
             tag.getDouble(TAG_LAST_POSX),
@@ -290,6 +305,7 @@ public class ScratchpadState implements IScratchpadState, ICapabilityProvider, I
         lastXp = tag.getInt(TAG_LAST_XP);
         lastAirSupply = tag.getInt(TAG_LAST_AIR);
         lastFallDistance = tag.getFloat(TAG_LAST_FALLDIST);
+        lastGameType = GameType.byId(tag.getInt(TAG_GAMETYPE));
     }
     
 }
