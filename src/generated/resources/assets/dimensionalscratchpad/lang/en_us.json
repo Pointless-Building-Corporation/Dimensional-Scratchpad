@@ -1,6 +1,8 @@
 {
   "block.dimensionalscratchpad.blank": "Blank",
   "dimension.dimensionalscratchpad.not_safe": "Can't teleport now, there are monsters nearby",
+  "key.dimensionalscratchpad.scratchpad": "Teleport to/from Scratchpad Dimension",
+  "key.dimensionalscratchpad.scratchpad__tools": "Open Scratchpad Tools Overlay",
   "screen.dimensionalscratchpad.color_gradient": "Scratchpad Dimension Color Gradient",
   "screen.dimensionalscratchpad.color_gradient_desc_end": "Ending Color of the Gradient",
   "screen.dimensionalscratchpad.color_gradient_desc_start": "Starting Color of the Gradient",

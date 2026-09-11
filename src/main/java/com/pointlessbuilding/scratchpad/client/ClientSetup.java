@@ -45,7 +45,7 @@ public class ClientSetup {
     @SubscribeEvent
     public static void registerKeybindings(RegisterKeyMappingsEvent event) {
         event.register(SCRATCHPAD_KEYMAP.get());
-        event.register(SCRATCHPAD_TOOLS_KEYMAP.get());
+        //event.register(SCRATCHPAD_TOOLS_KEYMAP.get());
     }
 
 }

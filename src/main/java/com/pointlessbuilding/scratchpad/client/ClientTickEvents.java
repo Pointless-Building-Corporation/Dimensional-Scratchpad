@@ -21,7 +21,7 @@ public class ClientTickEvents {
     public static void onClientTick(ClientTickEvent event) {
         if(event.phase == TickEvent.Phase.END) {
             handleKeybinds();
-            callAllRenderTicks();
+            //callAllRenderTicks();
         }
 
     }
@@ -31,15 +31,15 @@ public class ClientTickEvents {
             Network.sendToServer(new ScratchpadPacket());
         }
 
-        ClientLevel curLevel = Minecraft.getInstance().level;
-        if(curLevel != null) {
-            if(curLevel.dimension().equals(ScratchpadDimension.LEVEL)) {
-                while(ClientSetup.SCRATCHPAD_TOOLS_KEYMAP.get().consumeClick()) {
-                    ScratchpadOverlay overlay = ScratchpadOverlay.getById();
-                    if(overlay != null) overlay.startOverlayOpeningAnimation();
-                }
-            }
-        }
+        // ClientLevel curLevel = Minecraft.getInstance().level;
+        // if(curLevel != null) {
+        //     if(curLevel.dimension().equals(ScratchpadDimension.LEVEL)) {
+        //         while(ClientSetup.SCRATCHPAD_TOOLS_KEYMAP.get().consumeClick()) {
+        //             ScratchpadOverlay overlay = ScratchpadOverlay.getById();
+        //             if(overlay != null) overlay.startOverlayOpeningAnimation();
+        //         }
+        //     }
+        // }
     }
 
     // Not sure I like that I need to call counter stuff here.

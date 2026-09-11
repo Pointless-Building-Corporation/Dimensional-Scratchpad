@@ -13,7 +13,7 @@ public class RegisterOverlay {
     
     @SubscribeEvent
     public static void registerScratchpadOverlay(RegisterGuiOverlaysEvent event) {
-        event.registerAbove(VanillaGuiOverlay.HOTBAR.id(), ScratchpadOverlay.OVERLAY_ID, new ScratchpadOverlay());
+        //event.registerAbove(VanillaGuiOverlay.HOTBAR.id(), ScratchpadOverlay.OVERLAY_ID, new ScratchpadOverlay());
     }
 
 }
