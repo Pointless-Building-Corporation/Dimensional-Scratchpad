@@ -11,7 +11,7 @@ Wherever you are in your Minecraft world, you can press the `[` keybind (default
 
 Key points:
 - The teleport is nearly instantaneous, no wasting time leaving your world and testing your work in a seperate creative world.
-- That said, it is also cheat-proof. You cannot modify your existing inventory in the real world in any way; you cannot enchant yourself, save yourself from dying via falling, hunger or lava; you cannot use ender chests within the scratchpad; and you cannot teleport to the dimension when there are mobs near you.
+- That said, it is also cheat-proof. You cannot modify your existing inventory in the real world in any way; you cannot enchant yourself, save yourself from dying via falling, hunger or lava; you cannot use ender chests within the scratchpad; and you cannot teleport to the dimension when there are mobs near you. (Of course, I assume almost every mod under the sun could surpass this; let me know if you find such instances and I'll try my best to account for it!)
 - Every player gets their own 64 size cube to work within; in multiplayer each cube is assigned to a single player. The reason for the size restriction is to prevent distractions and to keep things private, just like a real scratchpad!
 
 Future Work
