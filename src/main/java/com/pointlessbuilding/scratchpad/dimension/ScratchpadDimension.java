@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.OptionalLong;
 
 import com.pointlessbuilding.scratchpad.DimensionalScratchpad;
-import com.pointlessbuilding.scratchpad.DimensionalScratchpadConfig;
 import com.pointlessbuilding.scratchpad.player.IScratchpadState;
 import com.pointlessbuilding.scratchpad.player.ScratchpadState;
 
@@ -34,7 +33,8 @@ public class ScratchpadDimension {
     public static final ResourceKey<LevelStem> DIM_KEY = ResourceKey.create(Registries.LEVEL_STEM, ResourceLocation.fromNamespaceAndPath(DimensionalScratchpad.MODID, "scratchpad_dimension"));
     public static final ResourceKey<Level> LEVEL = ResourceKey.create(Registries.DIMENSION, ResourceLocation.fromNamespaceAndPath(DimensionalScratchpad.MODID, "scratchpad_dimension"));
     public static final ResourceKey<DimensionType> DIM_TYPE = ResourceKey.create(Registries.DIMENSION_TYPE, ResourceLocation.fromNamespaceAndPath(DimensionalScratchpad.MODID, "scratchpad_dimension"));
-    
+    public static final int SHELL_SIZE = 64;
+
     // Bootstap is factually a misspelling in Mojang's og source code. That's hilarious
     public static void bootstrapType(BootstapContext<DimensionType> context) {
         context.register(DIM_TYPE, new DimensionType(
@@ -62,7 +62,7 @@ public class ScratchpadDimension {
 
         FixedBiomeSource voidSource = new FixedBiomeSource(biomes.getOrThrow(Biomes.THE_VOID));
 
-        ScratchpadChunkGenerator scratchpadGenerator = new ScratchpadChunkGenerator(voidSource, 64);
+        ScratchpadChunkGenerator scratchpadGenerator = new ScratchpadChunkGenerator(voidSource, SHELL_SIZE);
 
         LevelStem stem = new LevelStem(dimTypes.getOrThrow(DIM_TYPE), scratchpadGenerator);
         context.register(DIM_KEY, stem);
@@ -119,8 +119,7 @@ public class ScratchpadDimension {
     }
 
     //Calculate new position in spiral form starting from x=1, z=1
-    private static Vec3 calculateNewScratchpadSlotPos(int slot) {
-        int shellSize = DimensionalScratchpadConfig.SHELL_SIZE.get();
+    public static Vec3 calculateNewScratchpadSlotPos(int slot) {
         int gx = 0, gz = 0;
         int stepsInLeg = 1, legCount = 0, stepsTaken = 0;
         if(slot > 0) {
@@ -139,7 +138,7 @@ public class ScratchpadDimension {
             }
         }
 
-        return new Vec3(gx * (shellSize + 23), 5, gz * (shellSize + 23));
+        return new Vec3(gx * (SHELL_SIZE + 23), 5, gz * (SHELL_SIZE + 23));
     }
 
     private static boolean LeaveDimension(ServerPlayer player) {

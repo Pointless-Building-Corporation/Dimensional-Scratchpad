@@ -1,6 +1,7 @@
 package com.pointlessbuilding.scratchpad.network;
 
 import com.pointlessbuilding.scratchpad.DimensionalScratchpad;
+import com.pointlessbuilding.scratchpad.network.packets.ClapWipePacket;
 import com.pointlessbuilding.scratchpad.network.packets.ScratchpadPacket;
 
 import net.minecraft.resources.ResourceLocation;
@@ -22,6 +23,7 @@ public class Network {
         );
 
         CHANNEL.registerMessage(ID++, ScratchpadPacket.class, ScratchpadPacket::encode, ScratchpadPacket::decode, ScratchpadPacket::handle);
+        CHANNEL.registerMessage(ID++, ClapWipePacket.class, ClapWipePacket::encode, ClapWipePacket::decode, ClapWipePacket::handle);
     }
 
     public static void sendToClient(Object packet, ServerPlayer player) {
